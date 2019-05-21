@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[为什么我们需要配置环境变量]]></title>
+    <url>%2Fposts%2Fwhy-do-we-need-to-configure-environment-variables%2F</url>
+    <content type="text"><![CDATA[之前学习Java的时候，感觉最难做的一件事情就是配置jdk的环境。那叫一个困难啊，Path, JAVA_HOME, CLASSPATH 印象深刻的很…（但是现在JDK11不用再配置classpath了，jre和jdk合并了） 就在去年暑假，要配OpenCV的环境，要调的东西还是比较多的，对环境配置的概念又加深了。 现在懂的多了，配过的环境也多了，配过的平台也不算少。现在就想分享一下 关于我对配环境这件事情的感受。 那就以 Windows 来说说环境配置的问题，Linux 下的其实差不多。 # 为什么需要环境变量 我记得计算机网络的老师在给我们讲 ip/mac地址 的时候提过一个例子： 你刚到这个班，班里都是新同学，你想找班里的小明同学该怎么办？ 答：在班里喊一声小明。这当然可以，小明肯定会响应你。对局域网来说也是如此。 但是，如果有一张座位表，上面有每个同学的座位信息，你想找到某个人是不是就很简单了。 环境变量也是如此，也很适合这个例子。 当用户在 cmd 中执行一个命令的时候，命令行的解释器就会去找你要执行的命令。 那么是去哪里找可执行的命令呢？两个地方： 当前路径下的可执行文件 环境变量Path中保存的路径下的可执行文件（包括系统变量和用户变量） # 举个例子 举个栗子： win + r大家都用过吧，经常用来快速运行某些程序，比如打开命令行窗口我们就会用到： 那电脑是怎么知道cmd在哪儿的呢？ 能看到 cmd.exe 是在 C:\Windows\System32\和 C:\Windows\SysWOW64\ 这两个路径下都有的，那就是说，电脑是去这两个路径之一打开的cmd.exe，那我们来看一下，系统环境变量里到底有没有这两个路径的其中一个呢？ 查看一下系统的环境变量中的Path是不是有这个路径： 在小娜的输入框里输入 path 或者 环境 可以直接跳转到修改环境变量的地方，不行的话只能在计算机图标右键属性了。 可以验证了吧~ 所以这个流程我们也弄清楚了： 12345你在运行窗口输入 cmd： -&gt; 解释器去寻找这个文件： -&gt; 先寻找当前路径下是否有 -&gt; 再寻找环境变量中的Path保存的路径是否有 -&gt; 没找到就报没找到 所以如果你没配置某个可执行文件到Path里，那你就得手动输入该文件的绝对路径才能打开了。 比如说 Java… # Path 外的其他字段 其他的一些字段也是方便我们使用的，想用的时候使用 %字段名% 就能调用了。 比如说我在系统设置里设置了 CMDER_ROOT 字段，将其赋值为D:\0ArtinD\cmder，这是一个路径。 然后我想打开该路径，就可以使用该字段名啦： 简单来说！就是编程中的变量名。定义一个常量，想用的时候可以使用。 # 用户变量和系统变量 操作系统中有用户的概念。 用户变量只对当前登录的用户生效。 系统变量对当前计算机的所有用户生效。]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>思考</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[安装 nvm 与 nodejs]]></title>
+    <url>%2Fposts%2Finstall-nvm%2F</url>
+    <content type="text"><![CDATA[在网上看到nvm这个神器之后，最近装Nodejs都是用nvm来装了。 刚好又装了 Linux Mint ，重新在Linux下安装一遍nvm。Windows 上也有的类似工具nvm-windows，使用方法都差不多。 github 链接： https://github.com/creationix/nvm nvm 是 nodejs 的一个版本控制工具，也就是 “Node Version Manager” 的三个首字母。 # 安装 nvm # 安装和升级 nvm 要安装或升级 nvm, 可以使用官方给的一个脚本： 官方目前的版本号是 v0.34.0。 你可以去上面给的链接里去安装最新的。 可以使用curl： 1curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash 或者 wget: 1wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash 这个脚本会克隆 nvm 的远程仓库到 ~/.nvm 路径下，并且会将添加激活代码到你终端的配置文件中。 执行完这条命令之后，一切就安装好了。 But in China, 你还需要配置一下代理。 # 配置 git 代理 我本地使用的是 electron-ssr，代理的地址是 socks5://127.0.0.1:1080。 执行下面这个命令，就可以针对github设置代理了。 12345# 只对github.comgit config --global http.https://github.com.proxy socks5://127.0.0.1:1080# 取消代理git config --global --unset http.https://github.com.proxy 注意哦，这种方式不支持 ssh 方式的代理，那个需要另外配置。在这里就不多讲，我会再写一篇博客来讲配置 ssh 的代理。 使用命令行的配置等效于修改个人目录下的 .gitconfig 文件。 Windows/Linux 都可以。 也就是说，可以通过修改 ~/.gitconfig 达到一样的效果： 加入下面这块代码就可以了。Windows同理。 12[http &quot;https://github.com&quot;] proxy = socks5://127.0.0.1:1080 # 配置终端代理 因为终端里的命令是不走系统代理的，可以使用 proxychains4 等软件代理命令。 配置好 proxychains4 后，使用 1proxychains4 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash 就安装好了。 # 配置 zsh 安装好 nvm 后，发现我本机只把启动的配置写入到 ~/.bashrc 而已，手动将配置复制到~/.zshrc中。 123export NVM_DIR=&quot;$HOME/.nvm&quot;[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \. &quot;$NVM_DIR/nvm.sh&quot; # This loads nvm[ -s &quot;$NVM_DIR/bash_completion&quot; ] &amp;&amp; \. &quot;$NVM_DIR/bash_completion&quot; # This loads nvm bash_completion 然后执行 source ~/.zshrc，即可 # 安装 nodejs # 配置 nvm 下载来源 执行： 1export NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node 将下载来源设置为国内淘宝镜像。 # nvm 安装 nodejs 执行： 1234# 安装node稳定版nvm install stable# 安装node最新版nvm install node 就是这么简单～～～ # nvm 基本使用 详见：https://github.com/creationix/nvm#usage 我自己使用的就几个命令，其实也就掌握这几个命令就够用了： 1234nvm list # 展示可下载的版本nvm install 10.10.0 # 安装对应版本nvm use 10.10.0 # 使用对应版本nvm which 10.10.0 # 查看对应版本的安装目录 # 配置 npm 国内源 1npm install -g mirror-config-china --registry=http://registry.npm.taobao.org 一下就可以配置好 好几个国内源～ That’s All.]]></content>
+      <categories>
+        <category>Nodejs</category>
+      </categories>
+      <tags>
+        <tag>Linux Mint</tag>
+        <tag>Nodejs</tag>
+        <tag>nvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ACM 输入输出语句]]></title>
+    <url>%2Fposts%2Facm-io%2F</url>
+    <content type="text"><![CDATA[一些自己用的输入输出语句。 # JAVA中在OJ上怎么实现多组输入 12345678910111213141516171819import java.util.Scanner;public class Main &#123; public static void main(String[] args) &#123; Scanner sc = new Scanner(System.in); while(sc.hasNext()) &#123; double a = sc.nextDouble(); int a1 = (int)a; int a2 = (int)(a*1000); if(a1* 1000 &lt; a2) &#123; System.out.println("No"); &#125;else &#123; System.out.println("Yes"); &#125; &#125; &#125;&#125; # C中在OJ上怎么实现多组输入]]></content>
+      <categories>
+        <category>ACM</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>OJ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Windows10 配置 OpenCV3.4.1 + Visual Studio]]></title>
+    <url>%2Fposts%2Finstall-opencv-windows-vs%2F</url>
+    <content type="text"><![CDATA[Windows下安装OpenCV以及配环境的事情，对于VS来说一点都不麻烦，简单几步就可以让VS使用OpenCV。 # 下载OpenCV OpenCV的下载链接：[https://opencv.org/releases.html] 选择 Windows 版本的下载。 下载下来是一个.exe格式的可执行文件，运行之后选择 OpenCV 的安装目录就可以。 我选的是c:/opencv，之后的教程都是有关这个目录的。 # 配置系统变量 打开系统设置界面（可以在小娜上输入系统设置），小娜就会帮你打开高级系统设置，点击环境变量，在系统变量的Path一栏中新建两个: 12C:\opencv\build\binC:\opencv\build\x64\vc14\bin 打开VS，创建一个项目 属性页： VC++目录： 包含文件目录： C:\opencv\build\include\ C:\opencv\build\include\opencv2 C:\opencv\build\include\opencv 库目录： C:\opencv\build\x64\vc14\lib 链接器： 输入： 附加依赖项：opencv_world341d.lib 如果是release的话就是把d去掉opencv_world341.lib # 测试 测试一下 12345678910111213#include "cv.h"#include "highgui.h"int main()&#123; IplImage* src = cvLoadImage("C:\\1.png");//此处的路径，一定是绝对路径，相对路径会报错的 cvNamedWindow("showImage"); cvShowImage("showImage", src); cvWaitKey(0); cvReleaseImage(&amp;src); cvDestroyWindow("showImage"); return 0;&#125;]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>OpenCV</tag>
+        <tag>C++</tag>
+        <tag>Visual Studio</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[如何创建一个更好的Hexo使用体验]]></title>
+    <url>%2Fposts%2Fto-build-a-better-hexo%2F</url>
+    <content type="text"><![CDATA[我经常在webide更新博客，但这只限于有网络的情况下。想本地调试的话，在没网之前就需要把源文件同步到本地来。这个功能用git来实现会非常好。 大概的思路就是在博客的仓库创建一个分支来备份源文件。 在部署网页之前可以先把源文件同步到备份分支，然后需要的时候本地拉取回来。 # 备份到仓库 你需要安装好git。 首先，你要在博客根目录下添加远程仓库。 1234# git remote add [shortname] [url]# [shortname] 设置仓库的名称# [url] 远程仓库的链接git remote add hexo https://git.coding.net/Artin/Artin.git 然后创建一个新的分支 1git branch backup 切换到backup分支 1git checkout backup 然后在博客根目录下执行 123git add .git commit -am &quot;update&quot;git push hexo backup 你可以去看看廖雪峰的git教程 关于push主题失败的同学，把主题中的.git给删掉就ok了 # 更加便携的方法 这个主意我只在ubuntu下试过。 首先，在博客根目录创建一个git.sh 在里面输入如下代码 1234567891011121314#!/bin/bash/# 这里的路径是你的博客的路径cd /home/ubuntu/workspace/hexo/echo "执行hexo clean"hexo cleanecho "hexo clean 执行完毕"echo "推送源代码"git add .git commit -am "update"git push hexo masterecho "推送源代码 执行完毕"echo "执行hexo g -d"hexo g -decho "hexo g -d 执行完毕" 以后想要更新博客，直接在博客根目录下输入: 1sh git.sh]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用coding提供的动态pages来制作一个自己的rss订阅]]></title>
+    <url>%2Fposts%2Ftinytinyrss%2F</url>
+    <content type="text"><![CDATA[2019 年 2 月 17 日 16:20:57 更新： 已经失效了！！ 已经失效了！！ 已经失效了！！ 现在部署可以一键部署了，但是已经无法获取更新了。 1failed to open stream: no suitable wrapper could be found 先说结论，不够好用，弃坑了，用国内的一览提供的 rss 服务。 多平台支持，和 inoreader 相比速度更快，而且对于目前我订阅的源来说并没有不可阅读的，而且在 inoreader 上看不了電腦玩物的图片，在一览上没问题的。 # 关于 ttrss 因为很喜欢关注科技界的新闻，需要一个聚合来看新闻的软件。 说不上是 rss 重度使用者吧，但是还是每天必刷新闻的 用了各种新闻软件之后，发现 rss 才是正道，不会被推荐打扰，就订阅那么几个源。每天刷一刷。 现在微信公众号几乎都不怎么看了，二者功能几乎重复哈哈哈哈哈 ttrss 即为 tinytinyrss(https://tt-rss.org/) 可以自己控制的自定义项较多的 rss 服务， 多平台支持 android 上推荐 feedme，最新的 3.5.1 版本支持了 tinytinyrss，体验很好。 之前用 inoreader 的时候就用的 feedme，已通过 play 请开发者吃了个苹果哈哈哈哈哈， tinytinyrss 也就是在 php 环境下安装的，pc 上用浏览器打开就可以了。 # 关于 coding 的动态 pages coding 提供了免费的动态 pages，可以用来架设自己的个人动态博客。 但是我最近在 rss 服务选择上犯了选择困难证，刚好想到之前看到过 ttrss coding 提供了 php+mysql 的环境，于是想试一试。 要准备的东西： coding webide coding pages baidu or google # 安装 tinytinyrss 首先你需要注册一个 coding 的账户 coding.net # 创建一个仓库备用 这里会显示当前的仓库地址，复制留着备用。 ssh 或者 https 都可以。 ssh 要先配置好 ssh 的权限。 # 下载 tt-rss 的源码传到 git 上 # 使用 git clone tiny 是一个开源项目，项目链接：https://git.tt-rss.org/git/tt-rss/src/master 如果你的电脑没装 git 的话建议用 coding 提供的 webide，秒开很省心，而且 push 代码的时候很快很快的。免费用户可以可且仅可开一个。 在安卓平台上也有提供 linux 终端的的软件，如 NeoTerm 和 Termux。 先把源代码 clone 到本地 1git clone https://git.tt-rss.org/git/tt-rss.git 克隆好后，修改/tt-rss/.git/config文件里的 remote url 为你的仓库地址(图里红框的位置)，仓库地址刚刚创建的时已经显示出来了 无法克隆的可以直接去版本发布中下载最新版。https://git.tt-rss.org/fox/tt-rss/releases # 直接上传 zip 包 在这里下载最新的版本。 https://git.tt-rss.org/fox/tt-rss/releases 解压之后可以看到本地多了一个tt-rss的文件夹，打开文件夹。 输入 1234git initgit remote add 你创建的仓库地址git add -A .git commit -am "upload tt-rss" 比如我的就是: 如果执行完 commit 发现有提示 Please tell me who you are. 就按照提示设置自己的邮箱和用户名。 设置完之后再执行一遍最后一句commit。 出现一堆create mode xxx的提示就可以了。 # 设置文件权限 在这步有一个小问题，需要把目录下的每个文件的权限都设置成 777,否则后面会遇到文件无法读写导致站点无法访问的问题。 在终端输入 1chmod -R 777 . 保存好后就可以 push 到仓库里了， 如果你创建仓库的时候勾选了使用readme初始化仓库，那么你在 push 的时候会遇到文件冲突。 方法是：修改了仓库地址之后先把本地的 readme.md 删除掉， 然后使用git pull将远程仓库的 readme.md 拉回本地。 push 的方法很简单 123cd tt-rss #进入你的ttrss文件夹下使用下面的命令# 不需要进行 add 和 commitgit push -u origin master 输入你的用户名密码就可以了，一般来说输入密码的时候是不可见的，不用担心。 # 开启动态 Pages 打开你的仓库，在侧边上选择 pages,然后选择 tab 上的动态 Pages 一定要等待部署完成后才能使用 # 配置 tinyrss 部署完成后打开上面给的链接，会来到 http://969983a8-4bea-4d25-bab5-2ac8183353ad.coding.io/install/ 要开始对 tiny 的配置了，在仓库的 pages 页面有数据库的连接信息，按相应的填到框中就可以了。 如果不需要改访问目录的话就直接点Test configuration 然后Initialize database就可以了 在Generated configuration file这一步，不要点击Save configuration，我们自己创建一个。方便我们之后调整 config 在刚刚的tt-rss目录下创建config.php，将图中文本框的内容复制进去 打开.gitignore文件，把 config,php 字样去掉才能 push，否则 git 会忽视这个文件。 继续将修改好的代码 push 到仓库 123git add .git commit -m "push config.php"git push origin master 等待再次部署好 就可以访问了，默认的用户名密码为admin和password # 更好用的 tinytiny 进去之后会让你改密码。 设置中有很多选项，也有很多插件，大家可以百度一下。 你需要启用 API 访问才能使用第三方客户端登陆。 推荐关闭在连续模式下自动展开文章和合并信息源，使之连续显示 总之自己使用吧，还是很好玩的。]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>RSS</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[来用用双拼吧]]></title>
+    <url>%2Fposts%2Fuse-shuangpin%2F</url>
+    <content type="text"><![CDATA[Hello everybody,long time no see. 时隔数月，终于更了第二篇文章，现在我想介绍一种输入方法，不同于平时使用的全拼，叫双拼，双拼和全拼或五笔一样，是一种输入方法 。 双拼是用定义好的单字母代替较长的多字母韵母或声母来进行输入的一种方法。 比如说我想用拼音打 程序员，用全拼方案就要打&quot;cheng xv yuan&quot;，而用小鹤双拼方案只需要打&quot;ig xu yr&quot;，比全拼的效率高了不少。 这篇文章只是介绍一下双拼就直接带你入门，而我也只是个初级使用者，还有很多更高级的使用方法就靠你自己学了。 文章后会给几个链接，搭配本文食用更佳。 实际使用感受我只能说：比全拼打的快，比五笔学的快。 # 概念 先来一段百科上的： 双拼是一种建立在拼音输入法基础上的输入方法，可视为全拼的一种改进，它通过将汉语拼音中每个含多个字母的声母或韵母各自映射到某个按键上，使得每个音都可以用最多两次按键打出，极大地提高了拼音输入法的输入速度。(此处说的只是拼音输入法…) 现在常见的方案包括小鹤双拼、微软拼音 2003、智能 ABC、拼音加加、紫光双拼、搜狗双拼、自然码、小熊双拼、大牛双拼等方案。这些方案的主要区别在于韵母的键位安排。双拼是用定义好的单字母代替较长的多字母韵母或声母来进行输入的一种方式。例如: 如果 T=t，M=ian，键入两个字母&quot;TM&quot;就会输入拼音&quot;tian&quot;。使用双拼可以减少击键次数，虽然需要记忆字母对应的键位，但是熟练之后效率会有一定提高。如果使用双拼，要在设置属性窗口把双拼选上即可。特殊拼音的双拼输入规则有:对于单韵母字，需要在前面输入字母 O+韵母。例如:输入 OA→A，输入 OO→O，输入 OE→E。而在自然码双拼方案中，和自然码输入法的双拼方式一致，对于单韵母字，需要输入双韵母，例如:输入 AA→A，输入 OO→O，输入 EE→E。 第一次知道双拼是看了少数派的一篇文章做少数派中的少数派：双拼输入快速入门，里面推荐的是用小鹤双拼，就一直在用 (其实也就学习了这么一种…)。很多输入法都支持小鹤双拼的，当然也支持其他的双拼。 # 学习使我快乐 学双拼要记得住每个键对应的声母和韵母，这有张小鹤的码表，同学你一定要记住它。 当时想着能在空余时间练习一下。于是用草稿纸画了一张上面那个图，事实证明这招很有效，放在桌上慢慢打字练手感，这个表和小鹤双拼的口诀 已经是要学习的全部内容。一开始我也背了这个口诀，后来打熟练了就能记住键位了，口诀也忘了…： Kuai ing Liang uang Ruan Cao Zou T ue Qiu Yun Wei Jan Mian 快 迎 两 王 软 草 走， 特 约 秋 云 为 见 面。 Xia ua Song iong shU chI zhVi Geng Dai Bin Niao Fen Pie Hang 夏 娃 怂 恿 书 痴 追， 更 待 滨 鸟 分 撇 航？ 把这首小诗结合上面的键位图看一下，就能看懂了。 比如说Kuai ing就是K这个键作韵母时对应两个韵母uai和ing。 举个例子： 我打&quot;快&quot; 我要按的键是&quot;kk&quot; k + uai 我打&quot;赢&quot; 我要按的键是&quot;yk&quot; y + ing # 练习 先介绍个在线练习的网站：双拼在线练习 - typing.sjz.io，请使用 pc 端浏览器进入。 练习使用键盘： http://typing.sjz.io/#/keyboard/ 练习打文章： http://typing.sjz.io/#/article/ ** 推荐先打打古诗词，因为很多诗词都押韵。打起来比较爽快。 目前发现这个网站就是有些多音字的拼音处理的不好，标出来的不是正确的读音，练习的时候需要注意拼音。还有就是说 文章字数太多可能会卡。 在下面可以下载到一个跟打器，可以本地练习打字的。 # 资源 小鹤官网 小鹤双拼贴吧 小鹤官方资源网盘(跟打器在飞扬版目录下的打字练习文件夹内) # 一些链接 这里再给出我参考的一部分网址，感谢： 官方贴吧的教程 少数派的教程 360 百科 OK，That’s all.愿你能喜欢上双拼。]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>双拼</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于手贱执行了sudo git之后那些事]]></title>
+    <url>%2Fposts%2Fsudo-git-fix%2F</url>
+    <content type="text"><![CDATA[在 Ubuntu 下用 git 的时候使用了sudo git add命令，导致每次不使用sudo前缀都无法对仓库进行操作。 因为用了 sudo 之后普通用户组就没有操作的权限了。在 stackoverflow 找到了解决办法。 首先我们要知道自己的用户和用户组的 id，在终端输入 1id -a 就能显示出来用户跟组的 id， 接下来需要用 chown 命令： 1234cd .git/objectsls -alsudo chown -R uid:groups *## 将uid和groups换成你自己的]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[为yelee主题加入腾讯分析]]></title>
+    <url>%2Fposts%2Fadd-tencent-analytics-to-yelee%2F</url>
+    <content type="text"><![CDATA[hexo 的原生主题自带了谷歌分析,而谷歌分析在国内水土不服。琢磨琢磨，把 next 主题上的腾讯分析添加到了正在用的 yelee 主题上。 顺带一提，腾讯分析真的是用过的最好用的站点统计软件。 用的主题是 yelee，没有腾讯分析，自己加了一个。 在主题目录下操作。 在_config.yml中添加 12tencent-analytics:# 在冒号后面配置你的腾讯分析id，id就是获取到的代码的数字部分 在layout/_partial/中创建一个新的tencent-analytics.ejs文件, 加入如下代码 1234567&lt;% if (theme.tencent_analytics)&#123; %&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;http://tajs.qq.com/stats?sId=&lt;%= theme.tencent_analytics %&gt;&quot; charset=&quot;UTF-8&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot;&gt; var _speedMark = new Date();&lt;/script&gt;&lt;% &#125; %&gt; 上面的代码包括了腾讯分析了。 在layout/_partial/中修改head.ejs： 12#随便找一行添加如下代码，让用户在打开网页时加载腾讯分析。&lt;%- partial(&apos;tencent-analytics&apos;) %&gt; 然后在主题的_config.yml中输入你的腾讯分析 id。 执行 12hexo cleanhexo g -d 就 ok 了。]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用在线ide和pages服务搭建一个免费的Hexo博客]]></title>
+    <url>%2Fposts%2Fuse-hexo-with-webide%2F</url>
+    <content type="text"><![CDATA[一直有着想写一点东西的想法，想有个自己的博客。但是现在国内的知名博客服务(某浪，CSXN)首页都是广告= = ，最后在知乎发现了 Hexo 这么个东西。 自己就能搭建一个国内访问快无广告自定义颇多的炫酷博客。 Hexo是一个用 nodejs 编写的静态博客框架，可以将生成的静态博客网页托管在服务器上。 国外的github.com和国内的coding.net 都提供免费的 pages 服务，可以用托管博客。 c9.io提供免费的在线 webide 服务 好难过，评论说现在注册 c9 要绑定信用卡了，这是真的这不是梦。 优点: 有网络就可以更新博客，只需要一个浏览器。 源文件在云端，可下载回本地。 可实时预览 markdown 文件。 完善的 linux 终端,有 root 权限。 我在 c9 的 workspace：https://ide.c9.io/lengthmin/hexo/ # 安装 # 关于 Hexo 官网： https://hexo.io/zh-cn/ A fast, simple &amp; powerful blog framework 快速、简洁且高效的博客框架 作者：Tommy Chen # 准备准备 注册 coding.net ｜ c9.io ** 注意:c9 没有被墙，但是注册的时候需要输入验证码，验证码使用的是 google 的 reCAPTCHA 服务。因此注册的时候需要科学上网。 ** 在你的 c9 控制台界面，创建一个 workspace，名字 hexo(自己喜欢就好) 选择模板为 blank c9 的控制台是 ubuntu 系统，并且已经装了我们搭建 Hexo 需要的 nodejs 跟 git。 # 开始安装 打开 workspace,在终端中输入 1npm install hexo-cli -g 等待安装成功 创建一个 blog 文件夹， 1mkdir blog 安装 Hexo 12cd bloghexo init 这样 Hexo 就安装完成了，我们先预览一下 1hexo s -p 8081 先按照我这么输命令，因为 c9 只允许使用 8080，8081，8082 三个端口，而 Hexo 默认的端口是 4000，所以如果只使用hexo s的话就预览不了。后面讲命令的时候会再提一下。 点击终端出现的地址，出现如下图的话就说明安装好了。 调教 hexo 请参见《hexo 你的博客》 在这推荐两个主题： yelee 跟 next # hexo 的常用命令 到这里，已经可以使用 Hexo 了 hexo 的常用命令有这些，都要在 Hexo 的根目录下执行 12345678910111213141516171819hexo g# 编译生成静态文件hexo d# 部署博客hexo g -d# g 跟 d 一起使用hexo clean# 清除以前生成的静态文件。# 通常，清理一下可以解决大多数问题。hexo s# 本地预览博客hexo new xxx# 新建一篇标题为xxx的文章hexo new draft xxx# 新建一篇标题为xxx的草稿hexo new page xxx# 新建一个页面hexo help#查看帮助 # 在 c9 使用hexo s时注意事项 c9 只允许用户使用8080、8081、8082三个端口。并且 8080 端口已被占用, 所以使用默认的hexo server是预览不了的，因为你进不去 4000 这个端口。 要把hexo server的命令改成 123hexo server -p 端口号# 可简写hexo s -p 端口号 也可以在站点配置文件_config.yml加入: 12server: port: 8081 以后只要使用hexo s就可以了。 # 部署博客 # 配置 SSH coding 的中文 ssh 配置帮助页面 https://coding.net/help/doc/git/ssh-key.html c9 已经默认生成了 ssh 密钥， ssh 密钥在 ~/.ssh/id_rsa.pub 把这个密钥添加到 coding 就好了。 点击文件目录右上角的齿轮 - show home in favorite ，就能查看根目录了。 # 配置 Deploy 在 coding 中创建一个仓库 名字为你的 coding 用户名，不区分大小写。 创建完仓库后，复制你的 SSH 地址 在 hexo 根目录下的 _config.yml中翻到尾部找到下面这串代码。然后修改 coding 后面的地址为你的仓库的 ssh 地址，这里的 master 是分支的意思。。 一定要注意改成你自己的 ssh 地址，注意是 ssh 地址。而且coding:后面是有个空格的，这就是 yaml 语言的格式，以后编辑_config.yml也要注意的。 1234deploy: type: git repo: coding: git@git.coding.net:Artin/Artin.git,master # 部署到 Coding Pages 上 这是 Coding 关于 Pages 的介绍。 https://coding.net/help/doc/pages/index.html 首先要安装 git 的插件: 在终端输入 1npm install hexo-deployer-git --save 等待安装完成。 然后输入命令： 12hexo cleanhexo g -d 每一次更新博客，都要重新部署。 # 一些 Tips # 修改终端时区 c9 的终端默认的时区是 UTC，和中国相差了 8 个时区。 终端输入: 1sudo dpkg-reconfigure tzdata 然后进入图形交互界面，选择Asia/Shanghai时区就行了 出现下面的提示即为成功 1234Current default time zone: 'Asia/Shanghai'Local time is now: Sat Aug 6 20:13:22 CST 2016.Universal Time is now: Sat Aug 6 12:13:22 UTC 2016. # 开启 c9 的 markdown 实时预览 写 markdown 时点击工具栏的Preview，选择第一个Live Prebiew file。 然后屏幕就会变成双栏，左边码 markdown，右边可实时预览。 # 未完待续]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>c9.io</tag>
+      </tags>
+  </entry>
+</search>
